@@ -2,12 +2,12 @@
     render: function() {  
         return (  
           <div className="commentBox">  
-
-            </div>  
+                vroom vroom
+            </div>
       );  
     }  
 });  
 ReactDOM.render(  
-  <CommentBox />,  
+    <CommentBox />,  
   document.getElementById('content')  
 ); 
