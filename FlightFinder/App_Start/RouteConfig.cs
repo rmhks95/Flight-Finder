@@ -14,10 +14,11 @@ namespace FlightFinder
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Comments",
+                name: "Flights",
                 url: "json",
-                defaults: new { controller = "Home", action = "Comments" }
+                defaults: new { controller = "Home", action = "Flights" }
             );
+            
 
             routes.MapRoute(
                 name: "Default",
