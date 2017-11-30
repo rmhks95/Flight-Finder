@@ -31,4 +31,4 @@
                     })
                 } </table>);
             }
-}); ReactDOM.render(< TableExample url="/Home/Flights" />, document.getElementById('container'));  
+}); ReactDOM.render(<div id="root"><TableEntries url="/Home/Flights" />, document.getElementById('container')</div>);  

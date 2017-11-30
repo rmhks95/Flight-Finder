@@ -1,45 +1,96 @@
 ﻿
 
-var TableHeader = React.createClass({
-    render: function () {
-        return (
-                <div className="flightsList">
-                    <br />
-                    <br/> 
-                    <table>
-                        <tr>
-                            <th>To</th>
-                            <th>From</th>
-                            <th>Flight Number</th>
-                            <th>Departs</th>
-                            <th>Arrives</th>
-                            <th>Main Cabin Price</th>
-                            <th>First Class Price</th>
-                        </tr>
-                    </table>
-                </div>
-        );
-    }
-});
-
 var Search = React.createClass({
+    getInitialState: function () {
+        return {
+            From: "",
+            To: ""
+        };
+    },
+
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+        console.log(this.state.From + ", " + this.state.To);
+    },
+
+
+    findFlights() {
+        console.log("here");
+         <TableEntries url="/Home/Flights" />
+            
+    },
+
     render: function () {
         return (
             <div>
-                <input placeholder="From" />
-                <p/>
-                <input placeholder="To" />
-                <p/>
-                <button>Submit</button>
+                <input name="From" placeholder="From" value={this.state.From} onChange={this.handleChange}/>
+                <p />
+                <input name="To" placeholder="To" value={this.state.To} onChange={this.handleChange} />
+                <p />
+                <button onClick={this.findFlights}>Submit</button>
+
             </div>
         );
     }
 });
 
 
-
 var TableEntries = React.createClass({
-    render: function() { return (<div />); }
+    getInitialState: function () {
+        return {
+            Flight: []
+        };
+    },
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function (data) {
+                this.setState({
+                    Flight: data
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    render: function () {
+        return (<table>
+            <tr>
+                <th>To</th>
+                <th>From</th>
+                <th>Flight Number</th>
+                <th>Departs</th>
+                <th>Arrives</th>
+                <th>Main Cabin Price</th>
+                <th>First Class Price</th>
+            </tr>
+            {
+            this.state.Flight.map(function (item, key) {
+                console.log(item[0].Value)
+                return ( <tr key={
+                    key
+                } > <td> {
+                    item[0].Value
+                } </td> <td > {
+                    item[1].Value
+                } </td> <td > {
+                    item[2].Value
+                } </td> <td > {
+                    item[3].Value
+                } </td> <td > {
+                    item[4].Value
+                } </td> <td > {
+                    item[5].Value
+                } </td> <td > {
+                    item[6].Value
+                } </td> </tr>)
+            })
+        } </table>);
+    }
 });
 
 
@@ -55,8 +106,6 @@ var Header = React.createClass({
                 <a href="/json"> JSON Display</a>
                 <p/>
                 <Search />
-                <TableHeader />
-                <TableEntries />
             </div>
         );
     }

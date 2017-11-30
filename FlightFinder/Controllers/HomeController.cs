@@ -20,7 +20,6 @@ namespace FlightFinder.Controllers
         [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]
         public ActionResult Flights()
         {
-            
             return Json(flights, JsonRequestBehavior.AllowGet);
         }
 
