@@ -12,8 +12,8 @@ namespace FlightFinder.Controllers
 {
     public class HomeController : Controller
     {
-        private static IList<dynamic> _flights;
-        private static IList<dynamic> _airports;
+        private static IList<dynamic> flights;
+        private static IList<dynamic> airports;
 
        
 
@@ -21,19 +21,19 @@ namespace FlightFinder.Controllers
         public ActionResult Flights()
         {
             
-            return Json(_flights, JsonRequestBehavior.AllowGet);
+            return Json(flights, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Airports()
         {
-            return Json(_airports, JsonRequestBehavior.AllowGet);
+            return Json(airports, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Home
         public ActionResult Index()
         {
-            _airports = ReadFiles(@"airports.csv");
-            _flights = ReadFiles(@"flights.csv");
+            airports = ReadFiles(@"airports.csv");
+            flights = ReadFiles(@"flights.csv");
             return View();
         }
 

@@ -36,13 +36,16 @@ var Search = React.createClass({
     }
 });
 
+
+
 var TableEntries = React.createClass({
-    render: function () {
-        return (
-            <table />
-            );
-    }
+    render: function() { return (<div />); }
 });
+
+
+
+
+
 
 var Header = React.createClass({
     render: function () {

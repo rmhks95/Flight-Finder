@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\flights.jsx" />
     <Content Include="Scripts\Test.css" />
     <Content Include="Scripts\Test.jsx" />
     <Content Include="Web.config" />
