@@ -1,6 +1,6 @@
 ﻿
 
-var Search = React.createClass({
+var SearchBox= React.createClass({
     getInitialState: function () {
         return {
             From: "",
@@ -12,17 +12,17 @@ var Search = React.createClass({
         this.setState({
             [event.target.name]: event.target.value
         });
-        console.log(this.state.From + ", " + this.state.To);
     },
 
 
     findFlights() {
-        console.log("here");
-         <TableEntries url="/Home/Flights" />
-            
+        
+        console.log("Here");
     },
 
     render: function () {
+        console.log(this.state.From + ", " + this.state.To);
+            
         return (
             <div>
                 <input name="From" placeholder="From" value={this.state.From} onChange={this.handleChange}/>
@@ -30,9 +30,10 @@ var Search = React.createClass({
                 <input name="To" placeholder="To" value={this.state.To} onChange={this.handleChange} />
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
-
+                < TableEntries url="/Home/Flights" />
             </div>
         );
+        
     }
 });
 
@@ -70,7 +71,6 @@ var TableEntries = React.createClass({
             </tr>
             {
             this.state.Flight.map(function (item, key) {
-                console.log(item[0].Value)
                 return ( <tr key={
                     key
                 } > <td> {
@@ -105,7 +105,7 @@ var Header = React.createClass({
                 <h1>Flights</h1>
                 <a href="/json"> JSON Display</a>
                 <p/>
-                <Search />
+                <SearchBox />
             </div>
         );
     }
