@@ -1,6 +1,38 @@
 ﻿//Contains all Front end components made using React 
 
 /**
+*Starts ReactDOM and sends to Header object
+*
+*/
+ReactDOM.render(
+    <Header />,
+    document.getElementById('content')
+); 
+
+
+
+/**
+*Header object
+*
+*/
+var Header = React.createClass({
+
+    //Displays header, link to JSON display of objects, and SearchBox
+    render: function () {
+        return (
+            <div className="commentBox">
+                <h1>Flights</h1>
+                <a href="/json"> JSON Display</a>
+                <p/>
+                <SearchBox />
+            </div>
+        );
+    }
+});
+
+
+
+/**
 *Makes the top div that contains the To and From and the sumbit button
 *
 */
@@ -60,6 +92,79 @@ var SearchBox = React.createClass({
         
     }
 });
+
+
+
+/**
+*Makes From object which selects all the airports from server
+*
+*/
+var From = React.createClass({
+
+    //Initializes all objects to empty
+    getInitialState: function () {
+        return {
+            Airport: [],
+            selected: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+    },
+
+
+    //Pulls airport JSON from server and sets it to Airport array
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function (data) {
+                this.setState({
+                    Airport: data
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    //When an airport is selected it changes variable
+    handleChange(event) {
+        this.setState({
+            selected: event.target.value
+        });
+
+
+    },
+
+    //Creates select object from Airport array
+    render: function () {
+        $(document).ready(function () {
+            $('.airport').select2();
+        });
+
+        console.log(this.state.selected);
+        return (
+            <div>
+            <br /><label> From:</label>
+                <select id="selected" onChange={this.handleChange}>
+                    <option disabled selected value> -- select an option -- </option>
+                    {
+                    this.state.Airport.map(function (item, key) {
+
+                    var combo = (item[0].Value + " - " + item[1].Value);
+
+                    return (
+
+                                <option id='selected' value={combo} key={key}>{combo}</option>
+                    )
+                    }.bind(this))
+                    };
+                </select><br />
+            </div>)
+
+
+    }
+})
 
 
 
@@ -130,74 +235,7 @@ var To = React.createClass({
     }
 })
 
-/**
-*Makes From object which selects all the airports from server
-*
-*/
-var From = React.createClass({
 
-    //Initializes all objects to empty 
-    getInitialState: function () {
-        return {
-            Airport: [],
-            selected: ''
-        };
-        this.handleChange = this.handleChange.bind(this);
-    },
-
-
-    //Pulls airport JSON from server and sets it to Airport array
-    componentDidMount: function () {
-        $.ajax({
-            url: this.props.url,
-            dataType: 'json',
-            success: function (data) {
-                this.setState({
-                    Airport: data
-                });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-    },
-
-    //When an airport is selected it changes variable 
-    handleChange(event) {
-        this.setState({
-            selected: event.target.value
-        });
-
-
-    },
-
-    //Creates select object from Airport array
-    render: function () {
-        $(document).ready(function () {
-            $('.airport').select2();
-        });
-
-        console.log(this.state.selected);
-        return (
-            <div><br /><label> From:</label>
-                <select id="selected" onChange={this.handleChange} >
-                    <option disabled selected value> -- select an option -- </option>
-                    {
-                        this.state.Airport.map(function (item, key) {
-
-                            var combo = (item[0].Value + " - " + item[1].Value);
-
-                            return (
-
-                                <option id='selected' value={combo} key={key}>{combo}</option>
-                            )
-                        }.bind(this))
-                    };
-            </select><br /></div>)
-
-
-    }
-})
 
 /**
 *Makes TableEntries object which displays flights
@@ -205,11 +243,13 @@ var From = React.createClass({
 */
 var TableEntries = React.createClass({
 
-    //Initializes Flight array to empty 
+    //Initializes variables to empty 
     getInitialState: function () {
         return {
-            Flight: []
+            Flight: [],
+            view: ''
         };
+        this.handleChange = this.handleChange.bind(this)
     },
 
     //Pulls flights JSON from server and sets it to Flight array
@@ -228,66 +268,63 @@ var TableEntries = React.createClass({
         });
     },
 
-    //Creates table from Flight array with headers
-    render: function () {
-        return (<table>
-            <tr>
-                <th>To</th>
-                <th>From</th>
-                <th>Flight Number</th>
-                <th>Departs</th>
-                <th>Arrives</th>
-                <th>Main Cabin Price</th>
-                <th>First Class Price</th>
-            </tr>
-            {
-            this.state.Flight.map(function (item, key) {
-                return ( <tr key={
-                    key
-                } > <td> {
-                    item[0].Value
-                } </td> <td > {
-                    item[1].Value
-                } </td> <td > {
-                    item[2].Value
-                } </td> <td > {
-                    item[3].Value
-                } </td> <td > {
-                    item[4].Value
-                } </td> <td > {
-                    item[5].Value
-                } </td> <td > {
-                    item[6].Value
-                } </td> </tr>)
-            })
-        } </table>);
-    }
-});
+    //When an sort is selected it changes variable 
+    handleChange(event) {
+        this.setState({
+            view: event.target.value
+        });
 
-/**
-*Header object
-*
-*/
-var Header = React.createClass({
+    },
 
-    //Displays header, link to JSON display of objects, and SearchBox
+    //Creates table from Flight array with headers and view selector
     render: function () {
         return (
-            <div className="commentBox">
-                <h1>Flights</h1>
-                <a href="/json"> JSON Display</a>
-                <p/>
-                <SearchBox />
+            <div>
+                <label>Sort by:</label>
+
+                <select onChange={this.handleChange}>
+                    <option value="0">Descending Price</option>
+                    <option value="1">Ascending Price</option>
+                    <option value="2">Departure Time</option>
+                </select>
+
+        
+                <table>
+                    <tr>
+                        <th>To</th>
+                        <th>From</th>
+                        <th>Flight Number</th>
+                        <th>Departs</th>
+                        <th>Arrives</th>
+                        <th>Main Cabin Price</th>
+                        <th>First Class Price</th>
+                    </tr>
+                    {
+                        this.state.Flight.map(function (item, key) {
+                            return ( <tr key={
+                                key
+                            } > <td> {
+                                item[0].Value
+                            } </td> <td > {
+                                item[1].Value
+                            } </td> <td > {
+                                item[2].Value
+                            } </td> <td > {
+                                item[3].Value
+                            } </td> <td > {
+                                item[4].Value
+                            } </td> <td > {
+                                item[5].Value
+                            } </td> <td > {
+                                item[6].Value
+                            } </td> </tr>)
+                        })
+                    } 
+                </table>
             </div>
         );
     }
 });
 
-/**
-*Starts ReactDOM and sends to Header object
-*
-*/
-ReactDOM.render(
-    <Header />,
-    document.getElementById('content')
-); 
+
+
