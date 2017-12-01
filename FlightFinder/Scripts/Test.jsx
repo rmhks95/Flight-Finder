@@ -1,6 +1,12 @@
-﻿
+﻿//Contains all Front end components made using React 
 
-var SearchBox= React.createClass({
+/**
+*Makes the top div that contains the To and From and the sumbit button
+*
+*/
+var SearchBox = React.createClass({
+
+    //Initializes all objects to empty 
     getInitialState: function () {
         return {
             From: "",
@@ -10,31 +16,41 @@ var SearchBox= React.createClass({
         this.handleData = this.handleData.bind(this);
     },
 
+    //Sets state of object when it was changes
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
         });
     },
 
-
+    //Will contact server side to select what flights are wanted
     findFlights() {
 
     },
 
-    handleData(data) {
+    //Sets the From variable when returned
+    handleFrom(data) {
         this.setState({
             From: data
         })
     },
 
+    //Sets the To variable when returned
+    handleTo(data) {
+        this.setState({
+            To: data
+        })
+    },
+
+    //Runs the From and To Components and displays submit button 
     render: function () {
         console.log(this.state.From + ", " + this.state.To);
         
         return (
             <div>
-                <From handle={this.handleData} id='from' url="/Home/Airports" />
+                <From handle={this.handleFrom} id='from' url="/Home/Airports" />
                 <p />
-                <To id='to' url="/Home/Airports" />
+                <To handle={this.handleTo} id='to' url="/Home/Airports" />
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
                 <TableEntries url="/Home/Flights" />
@@ -45,7 +61,15 @@ var SearchBox= React.createClass({
     }
 });
 
+
+
+/**
+*Makes To object which selects all the airports from server
+*
+*/
 var To = React.createClass({
+
+    //Initializes all objects to empty 
     getInitialState: function () {
         return {
             Airport: [],
@@ -53,6 +77,8 @@ var To = React.createClass({
         };
         this.handleChange = this.handleChange.bind(this);
     },
+
+    //Pulls airports JSON from server and sets it to Airport array
     componentDidMount: function () {
         $.ajax({
             url: this.props.url,
@@ -68,6 +94,7 @@ var To = React.createClass({
         });
     },
 
+    //When an airport is selected it changes variable 
     handleChange(event) {
         this.setState({
             selected : event.target.value
@@ -75,6 +102,7 @@ var To = React.createClass({
         
     },
 
+    //Creates select object from Airport array
     render: function () {
         $(document).ready(function () {
             $('.airport').select2();
@@ -83,7 +111,7 @@ var To = React.createClass({
         console.log(this.state.selected);
         return (
             <div><br /><label> To:</label>
-                <select id="selected" onChange={this.handleChange} >
+                <select id="selected" onChange={this.handleChange} required>
                     <option disabled selected value> -- select an option -- </option>
                     {
                         this.state.Airport.map(function (item, key) {
@@ -102,7 +130,13 @@ var To = React.createClass({
     }
 })
 
+/**
+*Makes From object which selects all the airports from server
+*
+*/
 var From = React.createClass({
+
+    //Initializes all objects to empty 
     getInitialState: function () {
         return {
             Airport: [],
@@ -110,6 +144,9 @@ var From = React.createClass({
         };
         this.handleChange = this.handleChange.bind(this);
     },
+
+
+    //Pulls airport JSON from server and sets it to Airport array
     componentDidMount: function () {
         $.ajax({
             url: this.props.url,
@@ -125,15 +162,16 @@ var From = React.createClass({
         });
     },
 
+    //When an airport is selected it changes variable 
     handleChange(event) {
         this.setState({
             selected: event.target.value
         });
 
-        this.props.From(this.state.selected)
 
     },
 
+    //Creates select object from Airport array
     render: function () {
         $(document).ready(function () {
             $('.airport').select2();
@@ -161,13 +199,20 @@ var From = React.createClass({
     }
 })
 
-
+/**
+*Makes TableEntries object which displays flights
+*
+*/
 var TableEntries = React.createClass({
+
+    //Initializes Flight array to empty 
     getInitialState: function () {
         return {
             Flight: []
         };
     },
+
+    //Pulls flights JSON from server and sets it to Flight array
     componentDidMount: function () {
         $.ajax({
             url: this.props.url,
@@ -182,6 +227,8 @@ var TableEntries = React.createClass({
             }.bind(this)
         });
     },
+
+    //Creates table from Flight array with headers
     render: function () {
         return (<table>
             <tr>
@@ -217,12 +264,13 @@ var TableEntries = React.createClass({
     }
 });
 
-
-
-
-
-
+/**
+*Header object
+*
+*/
 var Header = React.createClass({
+
+    //Displays header, link to JSON display of objects, and SearchBox
     render: function () {
         return (
             <div className="commentBox">
@@ -235,6 +283,10 @@ var Header = React.createClass({
     }
 });
 
+/**
+*Starts ReactDOM and sends to Header object
+*
+*/
 ReactDOM.render(
     <Header />,
     document.getElementById('content')

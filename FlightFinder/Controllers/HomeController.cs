@@ -12,9 +12,22 @@ namespace FlightFinder.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// IList containing flights for front-end to retrieve
+        /// </summary>
         private static IList<dynamic> flights;
+
+        /// <summary>
+        /// IList containing airports for front-end to retrieve
+        /// </summary>
         private static IList<dynamic> airports;
 
+
+        /// <summary>
+        /// Changes the way the flights are sorted
+        /// 0 descending in price, 1 ascending in price, 2 ascending Depart time
+        /// </summary>
+        /// <param name="by">Int sent from front end to point to which view is wanted</param>
         public void SortFlights(int by)
         {
             
@@ -45,11 +58,20 @@ namespace FlightFinder.Controllers
        
 
         [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]
+
+        /// <summary>
+        /// Makes JSON object of flights IList
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Flights()
         {
             return Json(flights, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Makes JSON object of airports IList
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Airports()
         {
             return Json(airports, JsonRequestBehavior.AllowGet);
@@ -63,6 +85,11 @@ namespace FlightFinder.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Reads csv files with CSVHelper
+        /// </summary>
+        /// <param name="filename">Name of file(including .csv)</param>
+        /// <returns>IList of csv entries</returns>
         public IList<dynamic> ReadFiles(string filename)
         {
             List<dynamic> info = new List<dynamic>();
