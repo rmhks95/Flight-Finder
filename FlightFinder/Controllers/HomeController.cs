@@ -34,7 +34,7 @@ namespace FlightFinder.Controllers
             if (by == 0)
             {
                  var result = from f in flights
-                              orderby f.MainCabinPrice descending
+                              orderby f.FirstClassPrice ascending
                               select f;
                 flights = result.ToList();
             }
@@ -48,7 +48,7 @@ namespace FlightFinder.Controllers
             else if(by == 2)
             {
                 var result = from f in flights
-                             orderby f.Departs ascending
+                             orderby Convert.ToDateTime(f.Departs) ascending
                              select f;
                 flights = result.ToList();
             }
@@ -65,6 +65,8 @@ namespace FlightFinder.Controllers
         /// <returns></returns>
         public ActionResult Flights()
         {
+           
+
             return Json(flights, JsonRequestBehavior.AllowGet);
         }
 
@@ -80,8 +82,9 @@ namespace FlightFinder.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            airports = ReadFiles(@"airports.csv");
-            flights = ReadFiles(@"flights.csv");
+           airports = ReadFiles(@"airports.csv");
+           flights = ReadFiles(@"flights.csv");
+            SortFlights(0);
             return View();
         }
 

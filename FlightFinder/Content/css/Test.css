@@ -1,13 +1,12 @@
-﻿body {
-}
-table {
-    font - family: arial, sans - serif;
-    border - collapse: collapse;
-    width: 100 %;
-}
+﻿
 
-td, th {
-    border: 1px solid #dddddd;
-    text - align: left;
-    padding: 8px;
+table{
+    empty-cells:hide;
+}
+tr {
+    padding: 15px;
+    border-bottom: 2px solid black;
+}
+th{
+    border-bottom: 1px solid black;
 }

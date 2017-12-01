@@ -1,15 +1,5 @@
 ﻿//Contains all Front end components made using React 
 
-/**
-*Starts ReactDOM and sends to Header object
-*
-*/
-ReactDOM.render(
-    <Header />,
-    document.getElementById('content')
-); 
-
-
 
 /**
 *Header object
@@ -20,8 +10,8 @@ var Header = React.createClass({
     //Displays header, link to JSON display of objects, and SearchBox
     render: function () {
         return (
-            <div className="commentBox">
-                <h1>Flights</h1>
+            <div className="overall">
+                <h1>Flight Finder</h1>
                 <a href="/json"> JSON Display</a>
                 <p/>
                 <SearchBox />
@@ -43,9 +33,10 @@ var SearchBox = React.createClass({
         return {
             From: "",
             To: "",
-            fromChild: ''
+            fromChild: '',
+            Sort: ''
         };
-        this.handleData = this.handleData.bind(this);
+        
     },
 
     //Sets state of object when it was changes
@@ -57,7 +48,7 @@ var SearchBox = React.createClass({
 
     //Will contact server side to select what flights are wanted
     findFlights() {
-
+        console.log(1)
     },
 
     //Sets the From variable when returned
@@ -74,18 +65,25 @@ var SearchBox = React.createClass({
         })
     },
 
+    //Sets the Sort variable when returned
+    handleSort(data) {
+        this.setState({
+            Sort: data
+        })
+    },
+
     //Runs the From and To Components and displays submit button 
     render: function () {
         console.log(this.state.From + ", " + this.state.To);
         
         return (
             <div>
-                <From handle={this.handleFrom} id='from' url="/Home/Airports" />
+                <From handlefrom={this.handleFrom} url="/Home/Airports" id='from' />
                 <p />
-                <To handle={this.handleTo} id='to' url="/Home/Airports" />
+                <To handleto={this.handleTo} id='to' url="/Home/Airports" />
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
-                <TableEntries url="/Home/Flights" />
+                <TableEntries handlesort={this.handleSort} url="/Home/Flights" />
                 
             </div>
         );
@@ -129,6 +127,7 @@ var From = React.createClass({
 
     //When an airport is selected it changes variable
     handleChange(event) {
+        this.props.handlefrom(event.target.value)
         this.setState({
             selected: event.target.value
         });
@@ -141,9 +140,9 @@ var From = React.createClass({
         $(document).ready(function () {
             $('.airport').select2();
         });
-
-        console.log(this.state.selected);
+        
         return (
+            
             <div>
             <br /><label> From:</label>
                 <select id="selected" onChange={this.handleChange}>
@@ -201,6 +200,7 @@ var To = React.createClass({
 
     //When an airport is selected it changes variable 
     handleChange(event) {
+        this.props.handleto(event.target.value)
         this.setState({
             selected : event.target.value
         });
@@ -212,8 +212,7 @@ var To = React.createClass({
         $(document).ready(function () {
             $('.airport').select2();
         });
-
-        console.log(this.state.selected);
+        
         return (
             <div><br /><label> To:</label>
                 <select id="selected" onChange={this.handleChange} required>
@@ -247,7 +246,7 @@ var TableEntries = React.createClass({
     getInitialState: function () {
         return {
             Flight: [],
-            view: ''
+            sort: ''
         };
         this.handleChange = this.handleChange.bind(this)
     },
@@ -270,21 +269,23 @@ var TableEntries = React.createClass({
 
     //When an sort is selected it changes variable 
     handleChange(event) {
+        this.props.handlesort(event.target.value)
         this.setState({
-            view: event.target.value
+            sort: event.target.value
         });
 
     },
 
     //Creates table from Flight array with headers and view selector
     render: function () {
+        console.log(this.state.sort)
         return (
             <div>
                 <label>Sort by:</label>
 
                 <select onChange={this.handleChange}>
-                    <option value="0">Descending Price</option>
-                    <option value="1">Ascending Price</option>
+                    <option value="0">First Class Price</option>
+                    <option value="1">Main Cabin Price</option>
                     <option value="2">Departure Time</option>
                 </select>
 
@@ -301,23 +302,16 @@ var TableEntries = React.createClass({
                     </tr>
                     {
                         this.state.Flight.map(function (item, key) {
-                            return ( <tr key={
-                                key
-                            } > <td> {
-                                item[0].Value
-                            } </td> <td > {
-                                item[1].Value
-                            } </td> <td > {
-                                item[2].Value
-                            } </td> <td > {
-                                item[3].Value
-                            } </td> <td > {
-                                item[4].Value
-                            } </td> <td > {
-                                item[5].Value
-                            } </td> <td > {
-                                item[6].Value
-                            } </td> </tr>)
+                            return (
+                                <tr key={key} >
+                                    <td> {item[0].Value} </td>
+                                    <td> {item[1].Value} </td>
+                                    <td> {item[2].Value} </td>
+                                    <td> {item[3].Value} </td>
+                                    <td> {item[4].Value} </td>
+                                    <td> {item[5].Value} </td>
+                                    <td> {item[6].Value} </td>
+                                </tr>)
                         })
                     } 
                 </table>
@@ -326,5 +320,12 @@ var TableEntries = React.createClass({
     }
 });
 
-
+/**
+*Starts ReactDOM and sends to Header object
+*
+*/
+ReactDOM.render(
+    <Header />,
+    document.getElementById('content')
+); 
 
