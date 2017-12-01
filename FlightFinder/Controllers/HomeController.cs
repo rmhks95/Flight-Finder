@@ -12,6 +12,12 @@ namespace FlightFinder.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController()
+        {
+            airports = ReadFiles(@"airports.csv");
+            flights = ReadFiles(@"flights.csv");
+        }
+
         /// <summary>
         /// IList containing flights for front-end to retrieve
         /// </summary>
@@ -28,10 +34,13 @@ namespace FlightFinder.Controllers
         /// 0 descending in price, 1 ascending in price, 2 ascending Depart time
         /// </summary>
         /// <param name="by">Int sent from front end to point to which view is wanted</param>
-        public void SortFlights(int by)
+       public ActionResult Sort(int by)
         {
-            
-            if (by == 0)
+
+            by = Convert.ToInt16(Request["Sort"]);
+
+
+                if (by == 0)
             {
                  var result = from f in flights
                               orderby f.FirstClassPrice ascending
@@ -52,8 +61,8 @@ namespace FlightFinder.Controllers
                              select f;
                 flights = result.ToList();
             }
-            
-            
+
+            return Json(flights, JsonRequestBehavior.AllowGet);
         }
        
 
@@ -65,7 +74,23 @@ namespace FlightFinder.Controllers
         /// <returns></returns>
         public ActionResult Flights()
         {
-           
+            
+            string arr = Request["To"].Split(' ')[0];
+            string dep = Request["From"].Split(' ')[0];
+            
+        
+            if(arr != null && dep != null) { 
+
+                var result = from f in flights
+                             where f.From == dep
+                             where f.To == arr
+                             select f;
+                /*result = from f in flights
+                         where f.Arrives == arr
+                         select f;*/
+
+                flights = result.ToList();
+            }
 
             return Json(flights, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +109,6 @@ namespace FlightFinder.Controllers
         {
            airports = ReadFiles(@"airports.csv");
            flights = ReadFiles(@"flights.csv");
-            SortFlights(0);
             return View();
         }
 

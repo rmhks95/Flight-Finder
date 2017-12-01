@@ -34,7 +34,8 @@ var SearchBox = React.createClass({
             From: "",
             To: "",
             fromChild: '',
-            Sort: ''
+            Sort: '',
+            flight: []
         };
         
     },
@@ -48,7 +49,19 @@ var SearchBox = React.createClass({
 
     //Will contact server side to select what flights are wanted
     findFlights() {
-        console.log(1)
+        $.ajax({
+            url: "/Home/Flights?To=" + this.state.To + "&From=" + this.state.From + "&Sort=".concat(this.state.Sort),
+            dataType: 'json',
+            success: function (data) {
+                this.setState({
+                    flight: data
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+
     },
 
     //Sets the From variable when returned
@@ -74,8 +87,7 @@ var SearchBox = React.createClass({
 
     //Runs the From and To Components and displays submit button 
     render: function () {
-        console.log(this.state.From + ", " + this.state.To);
-        
+        console.log(this.state.sort);
         return (
             <div>
                 <From handlefrom={this.handleFrom} url="/Home/Airports" id='from' />
@@ -83,8 +95,8 @@ var SearchBox = React.createClass({
                 <To handleto={this.handleTo} id='to' url="/Home/Airports" />
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
-                <TableEntries handlesort={this.handleSort} url="/Home/Flights" />
                 
+                <TableEntries handlesort={this.handleSort} flight={this.state.flight}/>
             </div>
         );
         
@@ -245,26 +257,26 @@ var TableEntries = React.createClass({
     //Initializes variables to empty 
     getInitialState: function () {
         return {
-            Flight: [],
+            flight: this.props.flight,
             sort: ''
         };
         this.handleChange = this.handleChange.bind(this)
     },
 
-    //Pulls flights JSON from server and sets it to Flight array
-    componentDidMount: function () {
+    findFlights() {
         $.ajax({
-            url: this.props.url,
+            url: "/Home/Sort?Sort=".concat(this.state.Sort),
             dataType: 'json',
             success: function (data) {
                 this.setState({
-                    Flight: data
+                    flight: data
                 });
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
+
     },
 
     //When an sort is selected it changes variable 
@@ -278,7 +290,7 @@ var TableEntries = React.createClass({
 
     //Creates table from Flight array with headers and view selector
     render: function () {
-        console.log(this.state.sort)
+        console.log(this.state.sort);
         return (
             <div>
                 <label>Sort by:</label>
@@ -301,7 +313,7 @@ var TableEntries = React.createClass({
                         <th>First Class Price</th>
                     </tr>
                     {
-                        this.state.Flight.map(function (item, key) {
+                        this.props.flight.map(function (item, key) {
                             return (
                                 <tr key={key} >
                                     <td> {item[0].Value} </td>
