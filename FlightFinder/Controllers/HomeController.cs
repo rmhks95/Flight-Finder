@@ -15,6 +15,33 @@ namespace FlightFinder.Controllers
         private static IList<dynamic> flights;
         private static IList<dynamic> airports;
 
+        public void SortFlights(int by)
+        {
+            
+            if (by == 0)
+            {
+                 var result = from f in flights
+                              orderby f.MainCabinPrice descending
+                              select f;
+                flights = result.ToList();
+            }
+            else if(by == 1)
+            {
+                var result = from f in flights
+                             orderby f.MainCabinPrice ascending
+                             select f;
+                flights = result.ToList();
+            }
+            else if(by == 2)
+            {
+                var result = from f in flights
+                             orderby f.Departs ascending
+                             select f;
+                flights = result.ToList();
+            }
+            
+            
+        }
        
 
         [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]

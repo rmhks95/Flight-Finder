@@ -4,8 +4,10 @@ var SearchBox= React.createClass({
     getInitialState: function () {
         return {
             From: "",
-            To: ""
+            To: "",
+            fromChild: ''
         };
+        this.handleData = this.handleData.bind(this);
     },
 
     handleChange(event) {
@@ -16,26 +18,148 @@ var SearchBox= React.createClass({
 
 
     findFlights() {
-        
-        console.log("Here");
+
+    },
+
+    handleData(data) {
+        this.setState({
+            From: data
+        })
     },
 
     render: function () {
         console.log(this.state.From + ", " + this.state.To);
-            
+        
         return (
             <div>
-                <input name="From" placeholder="From" value={this.state.From} onChange={this.handleChange}/>
+                <From handle={this.handleData} id='from' url="/Home/Airports" />
                 <p />
-                <input name="To" placeholder="To" value={this.state.To} onChange={this.handleChange} />
+                <To id='to' url="/Home/Airports" />
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
-                < TableEntries url="/Home/Flights" />
+                <TableEntries url="/Home/Flights" />
+                
             </div>
         );
         
     }
 });
+
+var To = React.createClass({
+    getInitialState: function () {
+        return {
+            Airport: [],
+            selected: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+    },
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function (data) {
+                this.setState({
+                    Airport: data
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    handleChange(event) {
+        this.setState({
+            selected : event.target.value
+        });
+        
+    },
+
+    render: function () {
+        $(document).ready(function () {
+            $('.airport').select2();
+        });
+
+        console.log(this.state.selected);
+        return (
+            <div><br /><label> To:</label>
+                <select id="selected" onChange={this.handleChange} >
+                    <option disabled selected value> -- select an option -- </option>
+                    {
+                        this.state.Airport.map(function (item, key) {
+                            
+                            var combo = (item[0].Value + " - " + item[1].Value);
+                            
+                            return (
+
+                                <option id='selected' value={combo} key={key}>{combo}</option>
+                            )
+                        }.bind(this))
+                    };
+            </select><br /></div>)
+        
+            
+    }
+})
+
+var From = React.createClass({
+    getInitialState: function () {
+        return {
+            Airport: [],
+            selected: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+    },
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function (data) {
+                this.setState({
+                    Airport: data
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    handleChange(event) {
+        this.setState({
+            selected: event.target.value
+        });
+
+        this.props.From(this.state.selected)
+
+    },
+
+    render: function () {
+        $(document).ready(function () {
+            $('.airport').select2();
+        });
+
+        console.log(this.state.selected);
+        return (
+            <div><br /><label> From:</label>
+                <select id="selected" onChange={this.handleChange} >
+                    <option disabled selected value> -- select an option -- </option>
+                    {
+                        this.state.Airport.map(function (item, key) {
+
+                            var combo = (item[0].Value + " - " + item[1].Value);
+
+                            return (
+
+                                <option id='selected' value={combo} key={key}>{combo}</option>
+                            )
+                        }.bind(this))
+                    };
+            </select><br /></div>)
+
+
+    }
+})
 
 
 var TableEntries = React.createClass({
