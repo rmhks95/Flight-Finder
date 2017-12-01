@@ -321,8 +321,8 @@ var TableEntries = React.createClass({
                                     <td> {item[2].Value} </td>
                                     <td> {item[3].Value} </td>
                                     <td> {item[4].Value} </td>
-                                    <td> {item[5].Value} </td>
-                                    <td> {item[6].Value} </td>
+                                    <td> ${item[5].Value} </td>
+                                    <td> ${item[6].Value} </td>
                                 </tr>)
                         })
                     } 
