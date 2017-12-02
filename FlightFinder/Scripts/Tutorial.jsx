@@ -23,7 +23,7 @@ $.getJSON("Home/Flights", function (json) {
         tr.append("<td>" + json[i].Arrives + "</td>")
         tr.append("<td>" + json[i].MainCabinPrice + "</td>")
         tr.append("<td>" + json[i].FirstClassPrice + "</td>")
-
+            < SortBox handlesort= { this.handleSort } />
     }
 });
 return (

@@ -28,45 +28,23 @@ namespace FlightFinder.Controllers
         /// </summary>
         private static IList<dynamic> airports;
 
+        [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]
 
         /// <summary>
         /// Changes the way the flights are sorted
         /// 0 descending in price, 1 ascending in price, 2 ascending Depart time
         /// </summary>
         /// <param name="by">Int sent from front end to point to which view is wanted</param>
-       public ActionResult Sort(int by)
+        public ActionResult Sort(int by)
         {
 
-            by = Convert.ToInt16(Request["Sort"]);
-
-
-                if (by == 0)
-            {
-                 var result = from f in flights
-                              orderby f.FirstClassPrice ascending
-                              select f;
-                flights = result.ToList();
-            }
-            else if(by == 1)
-            {
-                var result = from f in flights
-                             orderby f.MainCabinPrice ascending
-                             select f;
-                flights = result.ToList();
-            }
-            else if(by == 2)
-            {
-                var result = from f in flights
-                             orderby Convert.ToDateTime(f.Departs) ascending
-                             select f;
-                flights = result.ToList();
-            }
+            
 
             return Json(flights, JsonRequestBehavior.AllowGet);
         }
        
 
-        [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]
+        
 
         /// <summary>
         /// Makes JSON object of flights IList
@@ -90,7 +68,34 @@ namespace FlightFinder.Controllers
                          select f;*/
 
                 flights = result.ToList();
+
+                int by = Convert.ToInt16(Request["Sort"]);
+
+
+                if (by == 0)
+                {
+                     result = from f in flights
+                                 orderby f.FirstClassPrice ascending
+                                 select f;
+                    flights = result.ToList();
+                }
+                else if (by == 1)
+                {
+                     result = from f in flights
+                                 orderby f.MainCabinPrice ascending
+                                 select f;
+                    flights = result.ToList();
+                }
+                else if (by == 2)
+                {
+                     result = from f in flights
+                                 orderby Convert.ToDateTime(f.Departs) ascending
+                                 select f;
+                    flights = result.ToList();
+                }
             }
+
+
 
             return Json(flights, JsonRequestBehavior.AllowGet);
         }

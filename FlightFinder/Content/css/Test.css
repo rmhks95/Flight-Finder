@@ -59,7 +59,7 @@ table{
     border-spacing: 0;
 }
 tr:hover{
-    background-color:aqua;
+    background-color: #efefefe;
 }
 tr {
     padding: 15px;
@@ -67,6 +67,8 @@ tr {
 }
 td, th{
     border: none;
+    padding:7px;
     position:relative;
     border-color:white;
+    text-align:center
 }
