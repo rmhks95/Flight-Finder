@@ -30,22 +30,6 @@ namespace FlightFinder.Controllers
         [OutputCache(Location = System.Web.UI.OutputCacheLocation.None)]
 
         /// <summary>
-        /// Changes the way the flights are sorted
-        /// 0 descending in price, 1 ascending in price, 2 ascending Depart time
-        /// </summary>
-        /// <param name="by">Int sent from front end to point to which view is wanted</param>
-        public ActionResult Sort(int by)
-        {
-
-            
-
-            return Json(flights, JsonRequestBehavior.AllowGet);
-        }
-       
-
-        
-
-        /// <summary>
         /// Makes JSON object of flights IList
         /// </summary>
         /// <returns></returns>
@@ -65,13 +49,10 @@ namespace FlightFinder.Controllers
                              where f.From == dep.ToUpper()
                              where f.To == arr.ToUpper()
                              select f;
-                /*result = from f in flights
-                         where f.Arrives == arr
-                         select f;*/
 
                 flights = result.ToList();
                 int by = 2;
-                try { by = Convert.ToInt16(Request["Sort"]); }catch(Exception ex){ }
+                try { by = Convert.ToInt16(Request["Sort"]); }catch{ }
                 
 
 
