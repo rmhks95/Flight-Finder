@@ -1,5 +1,5 @@
 ﻿//Contains all Front end components made using React 
-
+// To see JSON data enter /Home/Flights?From=(Abbrv. of airport)&To=(Abbrv. of airport)
 
 /**
 *Header object
@@ -12,7 +12,6 @@ var Header = React.createClass({
         return (
             <div className="overall">
                 <h1>Flight Finder</h1>
-                <a href="/json"> JSON Display</a>
                 <p />
                 <SearchBox />
             </div>
@@ -33,8 +32,6 @@ var SearchBox = React.createClass({
         return {
             From: "",
             To: "",
-            fromChild: '',
-            Sort: 2,
             flight: []
         };
 
@@ -48,10 +45,9 @@ var SearchBox = React.createClass({
     },
 
     //Will contact server side to select what flights are wanted
-    findFlights() {
-        console.log(this.state.Sort + "2");
+    findFlights(num) {
         $.ajax({
-            url: "/Home/Flights?To=" + this.state.To + "&From=" + this.state.From + "&Sort=".concat(this.state.Sort),
+            url: "/Home/Flights?From=" + this.state.From + "&To=" + this.state.To + "&Sort=".concat(num),
             dataType: 'json',
             success: function (data) {
                 this.setState({
@@ -79,16 +75,6 @@ var SearchBox = React.createClass({
         })
     },
 
-    //Sets the Sort variable when returned
-    handleSort(data) {
-        this.setState({
-            Sort: data
-        })
-        console.log(this.state.Sort);
-        this.findFlights();
-        
-
-    },
 
     //Runs the From and To Components and displays submit button 
     render: function () {
@@ -100,7 +86,7 @@ var SearchBox = React.createClass({
                 <p />
                 <button onClick={this.findFlights}>Submit</button>
 
-                <TableEntries handlesort={this.handleSort} flight={this.state.flight} />
+                <TableEntries handlesort={this.findFlights} flight={this.state.flight} />
             </div>
         );
 
@@ -161,8 +147,8 @@ var From = React.createClass({
 
             <div>
                 <br /><label> From:</label>
-                <select id="selected" onChange={this.handleChange}>
-                    <option disabled selected value> -- select an option -- </option>
+                <select id="selected" defaultValue onChange={this.handleChange}>
+                    <option disabled value> -- select an option -- </option>
                     {
                         this.state.Airport.map(function (item, key) {
 
@@ -231,8 +217,8 @@ var To = React.createClass({
 
         return (
             <div><br /><label> To:</label>
-                <select id="selected" onChange={this.handleChange} required>
-                    <option disabled selected value> -- select an option -- </option>
+                <select id="selected" defaultValue onChange={this.handleChange} required>
+                    <option disabled value> -- select an option -- </option>
                     {
                         this.state.Airport.map(function (item, key) {
 
@@ -284,14 +270,15 @@ var TableEntries = React.createClass({
             <div>
                 <label>Sort by:</label>
 
-                <select onChange={this.handleChange}>
+                <select defaultValue onChange={this.handleChange}>
                     <option value="0">First Class Price</option>
                     <option value="1">Main Cabin Price</option>
-                    <option value="2" selected>Departure Time</option>
+                    <option value="2" value>Departure Time</option>
                 </select>
 
 
                 <table>
+                    <tbody>
                     <tr>
                         <th>To</th>
                         <th>From</th>
@@ -315,6 +302,7 @@ var TableEntries = React.createClass({
                                 </tr>)
                         })
                     }
+                    </tbody>
                 </table>
             </div>
         );

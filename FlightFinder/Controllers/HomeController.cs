@@ -52,9 +52,12 @@ namespace FlightFinder.Controllers
         /// <returns></returns>
         public ActionResult Flights()
         {
+
+            try
+            {
+                string arr = Request["To"].Split(' ')[0];
+                string dep = Request["From"].Split(' ')[0];
             
-            string arr = Request["To"].Split(' ')[0];
-            string dep = Request["From"].Split(' ')[0];
             
         
             if(arr != null && dep != null) { 
@@ -68,31 +71,29 @@ namespace FlightFinder.Controllers
                          select f;*/
 
                 flights = result.ToList();
-
-                int by = Convert.ToInt16(Request["Sort"]);
+                int by = 2;
+                try { by = Convert.ToInt16(Request["Sort"]); }catch(Exception ex){ }
+                
 
 
                 if (by == 0)
                 {
-                     result = from f in flights
-                                 orderby f.FirstClassPrice ascending
-                                 select f;
-                    flights = result.ToList();
-                }
+                    flights = flights.OrderBy(flights => Convert.ToInt16(flights.FirstClassPrice)).ToList();
+                    }
                 else if (by == 1)
                 {
-                     result = from f in flights
-                                 orderby f.MainCabinPrice ascending
-                                 select f;
-                    flights = result.ToList();
+                          
+                    flights = flights.OrderBy(flights => Convert.ToInt16(flights.MainCabinPrice)).ToList();
                 }
                 else if (by == 2)
                 {
-                     result = from f in flights
-                                 orderby Convert.ToDateTime(f.Departs) ascending
-                                 select f;
-                    flights = result.ToList();
-                }
+                    flights = flights.OrderBy(flights => Convert.ToDateTime(flights.Departs)).ToList();
+                 }
+            }
+            }
+            catch
+            {
+
             }
 
 
