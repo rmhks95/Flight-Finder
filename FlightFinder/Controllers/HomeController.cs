@@ -6,7 +6,6 @@ using System.Reflection;
 using System.IO;
 using System.Web.Mvc;
 using CsvHelper;
-using FlightFinder.Models;
 
 namespace FlightFinder.Controllers
 {
@@ -79,7 +78,7 @@ namespace FlightFinder.Controllers
                 if (by == 0)
                 {
                     flights = flights.OrderBy(flights => Convert.ToInt16(flights.FirstClassPrice)).ToList();
-                    }
+                }
                 else if (by == 1)
                 {
                           
@@ -88,7 +87,7 @@ namespace FlightFinder.Controllers
                 else if (by == 2)
                 {
                     flights = flights.OrderBy(flights => Convert.ToDateTime(flights.Departs)).ToList();
-                 }
+                }
             }
             }
             catch
