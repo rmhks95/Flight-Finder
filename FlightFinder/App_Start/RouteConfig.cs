@@ -12,14 +12,7 @@ namespace FlightFinder
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            //Shows flights in JSON object if you type /json on the end of the URL
-            routes.MapRoute(
-                name: "Flights",
-                url: "json",
-                defaults: new { controller = "Home", action = "Flights" }
-            );
-            
+          
             //Default view
             routes.MapRoute(
                 name: "Default",

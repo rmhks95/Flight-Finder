@@ -139,9 +139,6 @@ var From = React.createClass({
 
     //Creates select object from Airport array
     render: function () {
-        $(document).ready(function () {
-            $('.airport').select2();
-        });
 
         return (
 
@@ -211,9 +208,6 @@ var To = React.createClass({
 
     //Creates select object from Airport array
     render: function () {
-        $(document).ready(function () {
-            $('.airport').select2();
-        });
 
         return (
             <div><br /><label> To:</label>

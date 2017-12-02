@@ -62,8 +62,8 @@ namespace FlightFinder.Controllers
             if(arr != null && dep != null) { 
 
                 var result = from f in flights
-                             where f.From == dep
-                             where f.To == arr
+                             where f.From == dep.ToUpper()
+                             where f.To == arr.ToUpper()
                              select f;
                 /*result = from f in flights
                          where f.Arrives == arr
