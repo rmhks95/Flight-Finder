@@ -54,21 +54,98 @@ table {
 
 *{margin:0 auto; padding:0}
 
+
+
+body{
+    font-family: Cabin, sans-serif;
+}
 table{
     border: none; 
     border-spacing: 0;
 }
-tr:hover{
+thead{
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+label{
+    font-weight:bold
+}
+tbody tr:hover{
     background-color: #8f8f8f;
 }
+tbody {
+    font-family: 'Palatino Linotype';
+}
 tr {
-    padding: 15px;
+    padding: 30px;
     border-bottom: 2px solid black;
 }
 td, th{
     border: none;
-    padding:7px;
+    padding:20px;
     position:relative;
     border-color:white;
     text-align:center
+}
+h1{
+    font-size:40px;
+}
+select{
+    padding: 4px 5px 4px 5px;
+    box-sizing:border-box;
+    border: 1px solid #dddddd;
+    font-size:16px;
+    outline:none;
+}
+select:focus{
+    border:1px solid #4ca6de;
+}
+button{
+    width:125px;
+    height: 30px;
+}
+.body{
+    margin-top:15px;
+    margin-left: 30px;
+}
+.head{
+    background-color:#01426a;
+    height:100px;
+}
+.title{
+    color:white;
+    padding:27px 30px;
+    font-size:45px;
+    font-family: 'Palatino Linotype';
+    font-weight:bolder
+}
+button{
+    border:none;
+    background-color:#48850b;
+    color:white;;
+    text-align:center;
+    text-decoration:none;
+    display:inline-block;
+    font-size: 20px;
+    cursor:pointer;
+    margin: 4px 2px;
+}
+.sort{
+    padding-left:550px;
+}
+.toselected {
+    color: #01426a;
+}
+.fromselected {
+    color: #01426a;
+}
+.first{
+    text-decoration:  underline;
+    text-decoration-color: blue;
+    font-size:large;
+}
+.main{
+    text-decoration: underline;
+    text-decoration-color: green;
+    font-size:large;
 }

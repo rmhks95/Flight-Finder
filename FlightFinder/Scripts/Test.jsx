@@ -10,10 +10,14 @@ var Header = React.createClass({
     //Displays header, link to JSON display of objects, and SearchBox
     render: function () {
         return (
-            <div className="overall">
-                <h1>Flight Finder</h1>
-                <p />
-                <SearchBox />
+            <div id="wrap">
+                <div className="head">
+                    <h1 className="title">Flight Finder</h1>
+                </div>
+                <div className="body">
+                    <br />
+                    <SearchBox />
+                </div>
             </div>
         );
     }
@@ -22,7 +26,7 @@ var Header = React.createClass({
 
 
 /**
-*Makes the top div that contains the To and From and the sumbit button
+*Makes the top div that contains the To and From and the sumbit button and the table of flights
 *
 */
 var SearchBox = React.createClass({
@@ -81,12 +85,13 @@ var SearchBox = React.createClass({
         return (
             <div>
                 <From handlefrom={this.handleFrom} url="/Home/Airports" id='from' />
-                <p />
+                <br/>
                 <To handleto={this.handleTo} id='to' url="/Home/Airports" />
-                <p />
-                <button onClick={this.findFlights}>Submit</button>
-
-                <TableEntries handlesort={this.findFlights} flight={this.state.flight} />
+                <br />
+                <button onClick={this.findFlights}>Find Flights</button>
+                <br />
+                <br />
+                <TableEntries className="sortTable" handlesort={this.findFlights} flight={this.state.flight} />
             </div>
         );
 
@@ -143,8 +148,8 @@ var From = React.createClass({
         return (
 
             <div>
-                <br /><label> From:</label>
-                <select id="selected" defaultValue onChange={this.handleChange}>
+                <label> From:  </label>
+                <select className="fromselected" defaultValue onChange={this.handleChange}>
                     <option disabled value> -- select an option -- </option>
                     {
                         this.state.Airport.map(function (item, key) {
@@ -157,7 +162,7 @@ var From = React.createClass({
                             )
                         }.bind(this))
                     };
-                </select><br />
+                </select>
             </div>)
 
 
@@ -210,8 +215,8 @@ var To = React.createClass({
     render: function () {
 
         return (
-            <div><br /><label> To:</label>
-                <select id="selected" defaultValue onChange={this.handleChange} required>
+            <div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To:&nbsp;</label>
+                <select className="toselected" defaultValue onChange={this.handleChange} required>
                     <option disabled value> -- select an option -- </option>
                     {
                         this.state.Airport.map(function (item, key) {
@@ -262,37 +267,41 @@ var TableEntries = React.createClass({
     render: function () {
         return (
             <div>
-                <label>Sort by:</label>
-
-                <select defaultValue onChange={this.handleChange}>
-                    <option value="0">First Class Price</option>
-                    <option value="1">Main Cabin Price</option>
-                    <option value="2" value>Departure Time</option>
-                </select>
-
+                <div className="sort">
+                    <br/>
+                    <label>Sort by:&nbsp;</label>
+                
+                    <select defaultValue onChange={this.handleChange}>
+                        <option value="0">First Class Price</option>
+                        <option value="1">Main Cabin Price</option>
+                        <option value="2" value>Departure Time</option>
+                    </select>
+                </div>
 
                 <table>
+                    <thead>
+                        <tr>
+                            <th>To</th>
+                            <th>From</th>
+                            <th>Flight Number</th>
+                            <th>Departs</th>
+                            <th>Arrives</th>
+                            <th>Main Cabin Price</th>
+                            <th>First Class Price</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr>
-                        <th>To</th>
-                        <th>From</th>
-                        <th>Flight Number</th>
-                        <th>Departs</th>
-                        <th>Arrives</th>
-                        <th>Main Cabin Price</th>
-                        <th>First Class Price</th>
-                    </tr>
                     {
                         this.props.flight.map(function (item, key) {
                             return (
-                                <tr key={key} >
+                                <tr id="flight" key={key} >
                                     <td> {item[0].Value} </td>
                                     <td> {item[1].Value} </td>
                                     <td> {item[2].Value} </td>
                                     <td> {item[3].Value} </td>
                                     <td> {item[4].Value} </td>
-                                    <td> ${item[5].Value} </td>
-                                    <td> ${item[6].Value} </td>
+                                    <td className="main" > ${item[5].Value} </td>
+                                    <td className="first"> ${item[6].Value} </td>
                                 </tr>)
                         })
                     }
