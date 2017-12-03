@@ -36,7 +36,8 @@ var SearchBox = React.createClass({
         return {
             From: "",
             To: "",
-            flight: []
+            flight: [],
+            now: true
         };
 
     },
@@ -62,7 +63,19 @@ var SearchBox = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
+        
 
+    },
+
+    handleSubmit(data) {
+        if (this.state.now) {
+            this.setState({ now:false })
+        }
+        else {
+            this.setState({ now: true })
+        }
+
+        this.findFlights(data)
     },
 
     //Sets the From variable when returned
@@ -78,6 +91,7 @@ var SearchBox = React.createClass({
             To: data
         })
     },
+    
 
 
     //Runs the From and To Components and displays submit button 
@@ -88,10 +102,10 @@ var SearchBox = React.createClass({
                 <br/>
                 <To handleto={this.handleTo} id='to' url="/Home/Airports" />
                 <br />
-                <button onClick={this.findFlights}>Find Flights</button>
+                <button onClick={this.handleSubmit}>Find Flights</button>
                 <br />
                 <br />
-                <TableEntries className="sortTable" handlesort={this.findFlights} flight={this.state.flight} />
+                <TableEntries className="sortTable" handlesort={this.findFlights} flight={this.state.flight} key={this.state.now} />
             </div>
         );
 
@@ -251,7 +265,12 @@ var TableEntries = React.createClass({
         };
         this.handleChange = this.handleChange.bind(this)
     },
-    
+
+    //Changes select object back to default when new flights are selected
+    componentDidMount() {
+        $('#sort').val($("#sort").data('default'));
+        
+    },  
 
     //When an sort is selected it changes variable 
     handleChange(event) {
@@ -259,8 +278,6 @@ var TableEntries = React.createClass({
         this.setState({
             sort: event.target.value
         });
-        
-
     },
 
     //Creates table from Flight array with headers and view selector
@@ -271,10 +288,10 @@ var TableEntries = React.createClass({
                     <br/>
                     <label>Sort by:&nbsp;</label>
                 
-                    <select defaultValue onChange={this.handleChange}>
+                    <select data-default="2" id="sort" onChange={this.handleChange}>
                         <option value="0">First Class Price</option>
                         <option value="1">Main Cabin Price</option>
-                        <option value="2" value>Departure Time</option>
+                        <option value="2">Departure Time</option>
                     </select>
                 </div>
 
